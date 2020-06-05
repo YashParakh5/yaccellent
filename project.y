@@ -6,8 +6,8 @@
 %}
 
 %token CONST_INT CONST_CHAR CONST_FLOAT id string enumeration_const CONST_STORAGE CONST_TYPE CONST_QUAL CONST_STRUCT CONST_ENUM DEFINE
-%token TOKEN_IF TOKEN_FOR TOKEN_DO TOKEN_WHILE TOKEN_BREAK TOKEN_SWITCH TOKEN_CONTINUE TOKEN_RETURN CASE DEFAULT TOKEN_GOTO TOKEN_SIZEOF PUNC DECISION_OR DECISION_AND DECISION_EQUALITY DECISION_SHIFT DECISION_EQLTY inc_const
-%token CONST_POINT param_const TOKEN_ELSE HEADER
+%token TOKEN_IF TOKEN_FOR TOKEN_DO TOKEN_WHILE TOKEN_BREAK TOKEN_SWITCH TOKEN_CONTINUE TOKEN_RETURN CASE DEFAULT TOKEN_GOTO TOKEN_SIZEOF PUNC DECISION_OR DECISION_AND DECISION_EQUALITY DECISION_SHIFT DECISION_EQLTY CONST_INC
+%token CONST_POINT CONST_PARAM TOKEN_ELSE HEADER
 %left '+' '-'
 %left '*' '/'
 %nonassoc "then"
@@ -113,7 +113,7 @@ type_qualifier_list			: type_qualifier
 							| type_qualifier_list type_qualifier
 							;
 param_type_list				: param_list
-							| param_list ',' param_const
+							| param_list ',' CONST_PARAM
 							;
 param_list					: param_decl
 							| param_list ',' param_decl
@@ -247,7 +247,7 @@ cast_exp					: unary_exp
 							| '(' type_name ')' cast_exp
 							;
 unary_exp					: postfix_exp
-							| inc_const unary_exp
+							| CONST_INC unary_exp
 							| unary_operator cast_exp
 							| TOKEN_SIZEOF unary_exp
 							| TOKEN_SIZEOF '(' type_name ')'
@@ -260,7 +260,7 @@ postfix_exp					: primary_exp
 							| postfix_exp '(' ')'
 							| postfix_exp '.' id
 							| postfix_exp CONST_POINT id
-							| postfix_exp inc_const
+							| postfix_exp CONST_INC
 							;
 primary_exp					: id 													
 							| consts 												

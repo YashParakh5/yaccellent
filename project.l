@@ -10,7 +10,7 @@
 "#define"[ ]+[a-zA-z_][a-zA-z_0-9]* 																	    {return DEFINE;}
 "auto"|"register"|"static"|"extern"|"typedef"																{return CONST_STORAGE;}
 "void"|"char"|"short"|"int"|"long"|"float"|"double"|"signed"|"unsigned"										{return CONST_TYPE;}	
-"const"|"volatile"																							{return CONST_QUAL;}
+"const"																							{return CONST_QUAL;}
 "enum"																										{return CONST_ENUM;}
 "case"																										{return CASE;}	
 "default"																									{return DEFAULT;}
@@ -28,11 +28,11 @@
 "sizeof"																									{return TOKEN_SIZEOF;}
 "||" 																										{return DECISION_OR;}
 "&&"																										{return DECISION_AND;}
-"..."																										{return param_const;}
+"..."																										{return CONST_PARAM;}
 "=="|"!="																									{return DECISION_EQUALITY;}
 "<="|">="																									{return DECISION_EQLTY;}
 ">>"|"<<"																									{return DECISION_SHIFT;}
-"++"|"--"																									{return inc_const;}
+"++"|"--"																									{return CONST_INC;}
 "->"																										{return CONST_POINT;}
 ";"|"="|","|"{"|"}"|"("|")"|"["|"]"|"*"|"+"|"-"|"/"|"?"|":"|"&"|"|"|"^"|"!"|"~"|"%"|"<"|">"					{return yytext[0];}
 "*="|"/="|"+="|"%="|">>="|"-="|"<<="|"&="|"^="|"|="															{return PUNC;}
