@@ -5,17 +5,19 @@
 	int success = 1;
 %}
 
-%token int_const char_const float_const id string enumeration_const storage_const type_const qual_const struct_const enum_const DEFINE
-%token TOKEN_IF TOKEN_FOR TOKEN_DO TOKEN_WHILE TOKEN_BREAK TOKEN_SWITCH TOKEN_CONTINUE TOKEN_RETURN CASE DEFAULT TOKEN_GOTO TOKEN_SIZEOF PUNC DECISION_OR DECISION_AND DECISION_EQUALITY DECISION_SHIFT DECISION_EQLTY inc_const
-%token point_const param_const TOKEN_ELSE HEADER
+%token CONST_INT CONST_CHAR CONST_FLOAT id string enumeration_const CONST_STORAGE CONST_TYPE CONST_QUAL CONST_STRUCT CONST_ENUM DEFINE
+%token TOKEN_IF TOKEN_FOR TOKEN_DO TOKEN_WHILE TOKEN_BREAK TOKEN_SWITCH TOKEN_CONTINUE TOKEN_RETURN CASE DEFAULT TOKEN_GOTO TOKEN_SIZEOF PUNC DECISION_OR DECISION_AND DECISION_EQUALITY DECISION_SHIFT DECISION_EQLTY CONST_INC
+%token CONST_POINT CONST_PARAM TOKEN_ELSE HEADER
 %left '+' '-'
 %left '*' '/'
 %nonassoc TOKEN_ELSE
 %start program_unit
+// program_unit, translation_unit and external_decl handle Library headers, #defines and Function declarations.
+// 
 %%
 program_unit				: HEADER program_unit                               
 							| DEFINE primary_exp program_unit                 	
-							| translation_unit									
+							| translation_unit								
 							;
 translation_unit			: external_decl 									
 							| translation_unit external_decl					
@@ -41,20 +43,20 @@ decl_specs					: storage_class_spec decl_specs
 							| type_qualifier decl_specs
 							| type_qualifier
 							;
-storage_class_spec			: storage_const
+storage_class_spec			: CONST_STORAGE
 							;
-type_spec					: type_const										
+type_spec					: CONST_TYPE										
 							| struct_or_union_spec
 							| enum_spec
 							| typedef_name
 							;
-type_qualifier				: qual_const
+type_qualifier				: CONST_QUAL
 							;
 struct_or_union_spec		: struct_or_union id '{' struct_decl_list '}'
 							| struct_or_union '{' struct_decl_list '}'
 							| struct_or_union id
 							;
-struct_or_union				: struct_const
+struct_or_union				: CONST_STRUCT
 							;
 struct_decl_list			: struct_decl
 							| struct_decl_list struct_decl
@@ -79,9 +81,9 @@ struct_declarator			: declarator
 							| declarator ':' const_exp
 							| ':' const_exp
 							;
-enum_spec					: enum_const id '{' enumerator_list '}'
-							| enum_const '{' enumerator_list '}'
-							| enum_const id
+enum_spec					: CONST_ENUM id '{' enumerator_list '}'
+							| CONST_ENUM '{' enumerator_list '}'
+							| CONST_ENUM id
 							;
 enumerator_list				: enumerator
 							| enumerator_list ',' enumerator
@@ -109,7 +111,7 @@ type_qualifier_list			: type_qualifier
 							| type_qualifier_list type_qualifier
 							;
 param_type_list				: param_list
-							| param_list ',' param_const
+							| param_list ',' CONST_PARAM
 							;
 param_list					: param_decl
 							| param_list ',' param_decl
@@ -243,7 +245,7 @@ cast_exp					: unary_exp
 							| '(' type_name ')' cast_exp
 							;
 unary_exp					: postfix_exp
-							| inc_const unary_exp
+							| CONST_INC unary_exp
 							| unary_operator cast_exp
 							| TOKEN_SIZEOF unary_exp
 							| TOKEN_SIZEOF '(' type_name ')'
@@ -255,8 +257,8 @@ postfix_exp					: primary_exp
 							| postfix_exp '(' argument_exp_list ')'
 							| postfix_exp '(' ')'
 							| postfix_exp '.' id
-							| postfix_exp point_const id
-							| postfix_exp inc_const
+							| postfix_exp CONST_POINT id
+							| postfix_exp CONST_INC
 							;
 primary_exp					: id 													
 							| consts 												
@@ -266,9 +268,9 @@ primary_exp					: id
 argument_exp_list			: assignment_exp
 							| argument_exp_list ',' assignment_exp
 							;
-consts						: int_const 											
-							| char_const
-							| float_const
+consts						: CONST_INT 											
+							| CONST_CHAR
+							| CONST_FLOAT
 							| enumeration_const
 							;
 %%

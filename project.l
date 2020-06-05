@@ -8,10 +8,10 @@
 %%
 "#include"([ ]+)?((<(\\.|[^>])+>)|(\"(\\.|[^"])+\"))					                                    {return HEADER;}
 "#define"[ ]+[a-zA-z_][a-zA-z_0-9]* 																	    {return DEFINE;}
-"auto"|"register"|"static"|"extern"|"typedef"																{return storage_const;}
-"void"|"char"|"short"|"int"|"long"|"float"|"double"|"signed"|"unsigned"										{return type_const;}	
-"const"|"volatile"																							{return qual_const;}
-"enum"																										{return enum_const;}
+"auto"|"register"|"static"|"extern"|"typedef"																{return CONST_STORAGE;}
+"void"|"char"|"short"|"int"|"long"|"float"|"double"|"signed"|"unsigned"										{return CONST_TYPE;}	
+"const"																							{return CONST_QUAL;}
+"enum"																										{return CONST_ENUM;}
 "case"																										{return CASE;}	
 "default"																									{return DEFAULT;}
 "if"																										{return TOKEN_IF;}
@@ -23,22 +23,22 @@
 "goto"																										{return TOKEN_GOTO;}
 "continue"																									{return TOKEN_CONTINUE;}
 "break"																										{return TOKEN_BREAK;}
-"struct"|"union"																							{return struct_const;}
+"struct"|"union"																							{return CONST_STRUCT;}
 "return"																									{return TOKEN_RETURN;}
 "sizeof"																									{return TOKEN_SIZEOF;}
 "||" 																										{return DECISION_OR;}
 "&&"																										{return DECISION_AND;}
-"..."																										{return param_const;}
+"..."																										{return CONST_PARAM;}
 "=="|"!="																									{return DECISION_EQUALITY;}
 "<="|">="																									{return DECISION_EQLTY;}
 ">>"|"<<"																									{return DECISION_SHIFT;}
-"++"|"--"																									{return inc_const;}
-"->"																										{return point_const;}
+"++"|"--"																									{return CONST_INC;}
+"->"																										{return CONST_POINT;}
 ";"|"="|","|"{"|"}"|"("|")"|"["|"]"|"*"|"+"|"-"|"/"|"?"|":"|"&"|"|"|"^"|"!"|"~"|"%"|"<"|">"					{return yytext[0];}
 "*="|"/="|"+="|"%="|">>="|"-="|"<<="|"&="|"^="|"|="															{return PUNC;}
-[0-9]+																									{return int_const;}
-[0-9]+"."[0-9]+																						{return float_const;}	
-"'"."'"																										{return char_const;}
+[0-9]+																										{return CONST_INT;}
+[0-9]+"."[0-9]+																								{return CONST_FLOAT;}	
+"'"."'"																										{return CONST_CHAR;}
 [a-zA-z_][a-zA-z_0-9]*			 																			{return id;}
 \"(\\.|[^\"])*\"																							{return string;}
 "//"(\\.|[^\n])*[\n]																						;
