@@ -10,9 +10,7 @@
 %token point_const param_const TOKEN_ELSE HEADER
 %left '+' '-'
 %left '*' '/'
-%nonassoc "then"
 %nonassoc TOKEN_ELSE
-%define parse.error verbose
 %start program_unit
 %%
 program_unit				: HEADER program_unit                               
@@ -171,7 +169,7 @@ compound_stat				: '{' decl_list stat_list '}'
 stat_list					: stat     												
 							| stat_list stat  										
 							;
-selection_stat				: TOKEN_IF '(' exp ')' stat 									%prec "then"
+selection_stat				: TOKEN_IF '(' exp ')' stat 									
 							| TOKEN_IF '(' exp ')' stat TOKEN_ELSE stat
 							| TOKEN_SWITCH '(' exp ')' stat
 							;
